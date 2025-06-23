@@ -4,12 +4,20 @@ import "../../styles/eventos.css";
 import Mapa from "../components/Mapa.jsx";
 import CountdownTimer from "../components/CountdownTimer.jsx";
 
+// ✅ Importa TODAS las imágenes desde assets
+import barcelonaImg from "../assets/barcelona.jpg";
+import retiroImg from "../assets/retiro.jpg";
+import principeImg from "../assets/principe.jpg";
+import talaveraImg from "../assets/talavera.jpg";
+import sevillaImg from "../assets/sevilla.jpg";
+import palacioImg from "../assets/palacio.jpg";
+
 function Eventos() {
     const lugares = [
         {
             nombre: "Barcelona",
             descripcion: "Parque de la Ciutadella",
-            imagen: "barcelona.jpg",
+            imagen: barcelonaImg,
             lat: 41.3881,
             lng: 2.1811,
             hora: "18:00",
@@ -19,7 +27,7 @@ function Eventos() {
         {
             nombre: "Madrid",
             descripcion: "Parque del Retiro",
-            imagen: "retiro.jpg",
+            imagen: retiroImg,
             lat: 40.411766,
             lng: -3.687116,
             hora: "19:00",
@@ -29,7 +37,7 @@ function Eventos() {
         {
             nombre: "Cáceres",
             descripcion: "Parque del Príncipe",
-            imagen: "principe.jpg",
+            imagen: principeImg,
             lat: 39.473704,
             lng: -6.383523,
             hora: "18:30",
@@ -39,7 +47,7 @@ function Eventos() {
         {
             nombre: "Talavera de la Reina",
             descripcion: "Parque la Alameda",
-            imagen: "talavera.jpg",
+            imagen: talaveraImg,
             lat: 39.959866,
             lng: -4.821326,
             hora: "18:00",
@@ -49,7 +57,7 @@ function Eventos() {
         {
             nombre: "Sevilla",
             descripcion: "Parque de María Luisa",
-            imagen: "sevilla.jpg",
+            imagen: sevillaImg,
             lat: 37.375817,
             lng: -5.987878,
             hora: "20:00",
@@ -59,7 +67,7 @@ function Eventos() {
         {
             nombre: "Madrid",
             descripcion: "Parque el Palacio de Cristal",
-            imagen: "palacio.jpg",
+            imagen: palacioImg,
             lat: 40.39237,
             lng: -3.700065,
             hora: "17:00",
@@ -85,7 +93,6 @@ function Eventos() {
             {!data ? (
                 <div className="row">
                     <div className="col-md-12">
-                        {/* SOLO VISIBLE EN ESCRITORIO */}
                         <div className="video-wrapper">
                             <ReactPlayer
                                 url="https://www.youtube.com/watch?v=UycU0OEjMvE"
@@ -126,7 +133,7 @@ function Eventos() {
 
                     <div className="detalle-grid">
                         <img
-                            src={`/${data.imagen}`}
+                            src={data.imagen} // ✅ Ya no usamos "/"
                             alt={`Imagen de ${data.nombre}`}
                             className="imagen-lugar"
                         />
@@ -146,12 +153,8 @@ function Eventos() {
                     </div>
 
                     <div className="info-extra mt-3">
-                        <p>
-                            <strong>Hora del evento:</strong> {data.hora}
-                        </p>
-                        <p>
-                            <strong>Asistentes:</strong> {data.asistentes}
-                        </p>
+                        <p><strong>Hora del evento:</strong> {data.hora}</p>
+                        <p><strong>Asistentes:</strong> {data.asistentes}</p>
                         <p>
                             <strong>Fecha:</strong>{" "}
                             {new Date(data.fechaISO).toLocaleDateString("es-ES", {

@@ -1,11 +1,3 @@
-body {
-  background: #213448;
-  color: #ECEFCA;
-  text-align: center;
-  margin: 0;
-  padding: 0;
-}
-
 .nutricion-page {
   padding-top: 10px;
 }
@@ -20,7 +12,6 @@ body {
   background: #213448;
 }
 
-
 .logo-navbar {
   height: 90px;
   object-fit: contain;
@@ -32,7 +23,7 @@ body {
 }
 
 .npHero {
-  background-image: url("/comdia.jpg");
+  background-image: url("https://www.fao.org/images/rlclibraries/news/organic-food-for-healthy-nutrition-and-superfoods-epfyh7j.jpg?sfvrsn=d7270160_2") !important;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -45,6 +36,7 @@ body {
   padding-bottom: 1rem;
   height: 260px;
 }
+
 
 .npHero::before {
   content: "";
@@ -70,23 +62,7 @@ body {
 }
 
 .tarjetaNp {
-  background: #ECEFCA;
-}
-
-
-.nutricion-page .tittle,
-.nutricion-page .subtittle {
-  color: white;
-  font-weight: bold;
-}
-
-.nutricion-page .card-title {
-  color: #547792;
-}
-
-
-.tarjetaNp {
-  background-color: #ECEFCA;
+  background-color: #ecefca;
   border-radius: 10px;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -94,7 +70,6 @@ body {
   flex-direction: column;
   height: 100%;
 }
-
 
 .tarjetaNp:hover {
   transform: translateY(-5px);
@@ -122,7 +97,7 @@ body {
 }
 
 .beneficios .subtittle {
-  color: #ECEFCA;
+  color: #ecefca;
   font-weight: bold;
 }
 
@@ -133,7 +108,7 @@ body {
 }
 
 .nutricion-page .beneficios .list-group-item {
-  background-color: #ECEFCA;
+  background-color: #ecefca;
   color: #213448;
   border: none;
   font-size: 1.1rem;
@@ -142,5 +117,8 @@ body {
   border-radius: 8px;
 }
 
-
-
+.nutricion-page .tittle,
+.nutricion-page .subtittle {
+  color: white;
+  font-weight: bold;
+}

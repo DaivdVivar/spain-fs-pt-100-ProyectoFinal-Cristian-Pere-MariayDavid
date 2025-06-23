@@ -57,9 +57,12 @@
 .imagen-lugar {
   width: 500px;
   height: 300px;
-  object-fit: cover;
   border-radius: 10px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
+
 
 .mapa-container {
   width: 500px;

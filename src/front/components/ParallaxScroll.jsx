@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import "../../styles/Paralax.css";
 import { Link } from 'react-router-dom';
+import paralaxImg from "../assets/paralax.png";
+
+
+
 
 const ParallaxScroll = () => {
   const [zoom, setZoom] = useState(1);
   const [transformOrigin, setTransformOrigin] = useState("50% center");
   const [isMoving, setIsMoving] = useState(false);
-  const [zoomTarget, setZoomTarget] = useState("center"); // empieza en el centro
+  const [zoomTarget, setZoomTarget] = useState("center");
 
   const handleMove = (target, targetZoom) => {
     if (isMoving) return;
@@ -39,7 +43,7 @@ const ParallaxScroll = () => {
 
       <div className="parallax-scene">
         <img
-          src="paralax.png"
+          src={paralaxImg}
           alt="Panorámica"
           className="parallax-image"
           style={{
