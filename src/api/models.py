@@ -71,8 +71,10 @@ class User(db.Model):
     support_tickets = relationship('SupportTicket', back_populates='user')
     template_items_created = relationship(
         'TemplateItem', back_populates='creator')
-    training_entries = relationship('TrainingEntry', back_populates='user')
-    nutrition_entries = relationship('NutritionEntry', back_populates='user')
+    training_entries = relationship(
+        'TrainingEntry', back_populates='user', foreign_keys="TrainingEntry.user_id")
+    nutrition_entries = relationship(
+        'NutritionEntry', back_populates='user', foreign_keys="NutritionEntry.user_id")
     profesionales_contratados = relationship(
         "UserProfesional",
         back_populates="user",
@@ -253,7 +255,7 @@ class SubscriptionPlan(db.Model):
             "price": float(self.price),
             "duration_month": self.duration_month,
             "description": self.description,
-            "price_id": self.price_id
+            "price_id": self.price_id,
         }
 
 
@@ -282,14 +284,16 @@ class Subscription(db.Model):
             "subscription_plan_id": self.subscription_plan_id,
             "start_date": self.start_date.isoformat() if self.start_date else None,
             "end_date": self.end_date.isoformat() if self.end_date else None,
-            "status": self.status
+            "status": self.status,
+            "plan": self.plan.serialize() if self.plan else None,
+            "payments": [payment.serialize() for payment in self.payments]
         }
 
 
 class Payment(db.Model):
     __tablename__ = 'payments'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    subscription_id: Mapped[int] = mapped_column(
+    subscription_id: Mapped[str] = mapped_column(
         Integer, ForeignKey('subscriptions.id'), nullable=False)
     amount: Mapped[Numeric] = mapped_column(Numeric, nullable=False)
     method: Mapped[str] = mapped_column(String(50), nullable=False)
@@ -398,14 +402,16 @@ class TrainingEntry(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(
         Integer, ForeignKey('users.id'), nullable=False)
-    # pecho, espalda, biceps, etc...
-    grupo: Mapped[str] = mapped_column(String(200), nullable=False)
-    # series: 4x12 con descanso de 'x'
-    nota: Mapped[str] = mapped_column(Text, nullable=False)
+    profesional_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey('users.id'), nullable=False)
+    dia_semana: Mapped[str] = mapped_column(String(40), nullable=False)
+    grupo: Mapped[str] = mapped_column(String(200), nullable=True)
+    nota: Mapped[str] = mapped_column(Text, nullable=True)
     fecha: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.utcnow, nullable=False)
-
-    user = relationship('User', back_populates='training_entries')
+    user = relationship("User", foreign_keys=[
+                        user_id], back_populates="training_entries")
+    profesional = relationship("User", foreign_keys=[profesional_id])
 
     def serialize(self):
         return {
@@ -413,7 +419,8 @@ class TrainingEntry(db.Model):
             "user_id": self.user_id,
             "grupo": self.grupo,
             "nota": self.nota,
-            "fecha": self.fecha.isoformat()
+            "fecha": self.fecha.isoformat(),
+            "dia_semana": self.dia_semana
         }
 
 
@@ -421,6 +428,8 @@ class NutritionEntry(db.Model):
     __tablename__ = 'nutrition_entries'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey('users.id'), nullable=False)
+    profesional_id: Mapped[int] = mapped_column(
         Integer, ForeignKey('users.id'), nullable=False)
     dia_semana: Mapped[str] = mapped_column(String(40), nullable=False)
     desayuno: Mapped[str] = mapped_column(Text, nullable=True)
@@ -430,7 +439,9 @@ class NutritionEntry(db.Model):
     fecha: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.utcnow, nullable=False)
 
-    user = relationship('User', back_populates='nutrition_entries')
+    user = relationship("User", foreign_keys=[
+                        user_id], back_populates="nutrition_entries")
+    profesional = relationship("User", foreign_keys=[profesional_id])
 
     def serialize(self):
         return {
@@ -442,5 +453,4 @@ class NutritionEntry(db.Model):
             "comida": self.comida,
             "cena": self.cena,
             "fecha": self.fecha.isoformat()
-
         }

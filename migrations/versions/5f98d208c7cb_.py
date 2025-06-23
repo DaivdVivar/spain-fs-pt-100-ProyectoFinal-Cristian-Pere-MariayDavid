@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: bd5f4a1d2028
+Revision ID: 5f98d208c7cb
 Revises: 
-Create Date: 2025-06-19 14:06:59.482709
+Create Date: 2025-06-23 08:34:33.599536
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'bd5f4a1d2028'
+revision = '5f98d208c7cb'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -65,12 +65,14 @@ def upgrade():
     op.create_table('nutrition_entries',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('profesional_id', sa.Integer(), nullable=False),
     sa.Column('dia_semana', sa.String(length=40), nullable=False),
     sa.Column('desayuno', sa.Text(), nullable=True),
     sa.Column('media_mañana', sa.Text(), nullable=True),
     sa.Column('comida', sa.Text(), nullable=False),
     sa.Column('cena', sa.Text(), nullable=False),
     sa.Column('fecha', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['profesional_id'], ['users.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -127,9 +129,12 @@ def upgrade():
     op.create_table('training_entries',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('grupo', sa.String(length=200), nullable=False),
-    sa.Column('nota', sa.Text(), nullable=False),
+    sa.Column('profesional_id', sa.Integer(), nullable=False),
+    sa.Column('dia_semana', sa.String(length=40), nullable=False),
+    sa.Column('grupo', sa.String(length=200), nullable=True),
+    sa.Column('nota', sa.Text(), nullable=True),
     sa.Column('fecha', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['profesional_id'], ['users.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
