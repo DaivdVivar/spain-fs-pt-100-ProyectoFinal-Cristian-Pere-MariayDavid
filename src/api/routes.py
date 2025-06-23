@@ -8,6 +8,7 @@ from flask_cors import CORS
 from sqlalchemy import select
 import stripe
 import os
+import random
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_bcrypt import Bcrypt
@@ -1068,6 +1069,7 @@ def get_training_entry(user_id):
                                   for entry in TrainingEntries]
     return jsonify(TrainingEntries_serialized), 200
 
+
 @api.route('/user/training_entries', methods=['GET'])
 @jwt_required()
 def get_my_training_entries():
@@ -1231,3 +1233,247 @@ def delete_nutrition_entry(entry_id):
     db.session.delete(entry)
     db.session.commit()
     return '', 204
+
+
+@api.route('/seed1', methods=['POST'])
+def seed():
+    nombres = ["David", "Cristian", "Pere", "María",
+        "Lucía", "Carlos", "Elena", "Jorge", "Marta", "Raúl"]
+
+    apellidos = ["Gómez", "Pérez", "Martínez", "Sánchez",
+    "López", "Ruiz", "Torres", "Díaz", "Romero", "Navarro"]
+    objetivos = ["Perder grasa", "Ganar masa muscular",
+    "Tonificar", "Mejorar resistencia"]
+    profesiones = ["entrenador", "nutricionista"]
+    sexos = ["masculino", "femenino", "otro"]
+    direcciones = [
+    "Calle Mayor 12, Madrid", "Av. Andalucía 45, Sevilla", "Calle Colón 7, Valencia",
+    "Gran Vía 88, Barcelona", "Paseo de Gracia 5, Barcelona", "Calle Larios 30, Málaga",
+    "Av. Constitución 20, Zaragoza", "Calle Uría 10, Oviedo", "Ronda Sant Pere 15, Barcelona",
+    "Av. del Oeste 50, Valencia"
+    ]
+    imagenes = [
+    "https://randomuser.me/api/portraits/men/1.jpg",
+    "https://randomuser.me/api/portraits/women/2.jpg",
+    "https://randomuser.me/api/portraits/men/3.jpg",
+    "https://randomuser.me/api/portraits/women/4.jpg",
+    "https://randomuser.me/api/portraits/men/5.jpg",
+    "https://randomuser.me/api/portraits/women/6.jpg",
+    "https://randomuser.me/api/portraits/men/7.jpg",
+    "https://randomuser.me/api/portraits/women/8.jpg"
+]
+
+    usuarios = []
+    user_instances = []
+
+    for i in range(1, 51):
+        nombre = random.choice(nombres)
+        apellido = random.choice(apellidos)
+        sexo = random.choice(sexos)
+        direccion = random.choice(direcciones)
+        imagen = random.choice(imagenes)
+
+        if i <= 10:
+            usuario = {
+                "email": f"profesional{i}@example.com",
+                "password": generate_password_hash("pepe123"),
+                "nombre": nombre,
+                "apellido": apellido,
+                "sexo": sexo,
+                "imagen": imagen,
+                "direccion": direccion,
+                "experiencia": random.randint(3, 15),
+                "telefono": str(600000000 + i),
+                "is_professional": True,
+                "profession_type": random.choice(profesiones),
+                "peso": None,
+                "altura": None,
+                "objetivo": None
+            }
+        else:
+            usuario = {
+                "email": f"usuario{i}@example.com",
+                "password": generate_password_hash("pepe123"),
+                "nombre": nombre,
+                "apellido": apellido,
+                "sexo": sexo,
+                "imagen": imagen,
+                "direccion": direccion,
+                "experiencia": random.randint(0, 5),
+                "telefono": str(600000000 + i),
+                "is_professional": False,
+                "profession_type": None,
+                "peso": round(random.uniform(55, 90), 1),
+                "altura": round(random.uniform(1.55, 1.90), 2),
+                "objetivo": random.choice(objetivos)
+            }
+
+        usuarios.append(usuario)
+
+
+
+
+    for data in usuarios:
+            user = User(
+                email=data["email"],
+                password=data["password"],
+                nombre=data["nombre"],
+                apellido=data["apellido"],
+                imagen=data["imagen"],
+                direccion=data["direccion"],
+                experiencia=data["experiencia"],
+                sexo=data["sexo"],
+                is_professional=data["is_professional"],
+                telefono=data["telefono"],
+                peso=data.get("peso"),
+                altura=data.get("altura"),
+                objetivo=data.get("objetivo"),
+                profession_type=data.get("profession_type")
+            )
+            user_instances.append(user)
+
+    db.session.add_all(user_instances)
+    db.session.commit()
+
+    user1 = user_instances[0]
+    user2 = user_instances[1]
+
+        # === PLANES ===
+    plan = PlanTemplate(
+            user_id=user2.id,
+            plan_type="entrenamiento",
+            nombre="Fuerza Inicial",
+            description="Rutina para principiantes enfocada en fuerza"
+        )
+    db.session.add(plan)
+    db.session.commit()
+
+        # === ITEMS ===
+    item1 = TemplateItem(
+            item_type="exercise",
+            nombre="Sentadilla",
+            muscle_group="Piernas",
+            series=4,
+            calorias=100,
+            proteinas=20,
+            repeticiones=12,
+            grasas=5,
+            meal_momento="desayuno",
+            cantidad=1,
+            carbohidratos=30,
+            orden=1,
+            creator_id=user2.id
+        )
+
+    item2 = TemplateItem(
+            item_type="exercise",
+            nombre="Press Banca",
+            muscle_group="Pecho",
+            series=3,
+            calorias=100,
+            carbohidratos=30,
+            meal_momento="desayuno",
+            proteinas=20,
+            cantidad=1,
+            repeticiones=10,
+            grasas=5,
+            orden=2,
+            creator_id=user2.id
+        )
+
+    db.session.add_all([item1, item2])
+    db.session.commit()
+
+        # === ASOCIACIÓN PLAN <-> ITEMS ===
+    pti1 = PlanTemplateItem(plan_template_id=plan.id, template_item_id=item1.id, orden=1)
+    pti2 = PlanTemplateItem(plan_template_id=plan.id, template_item_id=item2.id, orden=2)
+    db.session.add_all([pti1, pti2])
+    db.session.commit()
+
+        # === SUBSCRIPTION PLANS ===
+    basic_plan = SubscriptionPlan(
+            name="Básico",
+            price=45.00,
+            duration_month=1,
+            description="Acceso a planes y eventos",
+            price_id=os.getenv("VITE_BASIC_PRICE_ID")
+        )
+
+    premium_plan = SubscriptionPlan(
+            name="Premium",
+            price=55.00,
+            duration_month=1,
+            description="Acceso completo + contacto directo con profesionales",
+            price_id=os.getenv("VITE_PREMIUM_PRICE_ID")
+        )
+
+    dmpc_plan = SubscriptionPlan(
+            name="Dmpc",
+            price=65.00,
+            duration_month=1,
+            description="Acceso completo + contacto directo con profesionales",
+            price_id=os.getenv("VITE_DMPC_PRICE_ID")
+        )
+
+    db.session.add_all([basic_plan, premium_plan, dmpc_plan])
+    db.session.commit()
+
+        # === SUBSCRIPTION ===
+    sub = Subscription(
+            user_id=user1.id,
+            subscription_plan_id=basic_plan.id,
+            start_date=datetime.utcnow().date(),
+            end_date=(datetime.utcnow() + timedelta(days=30)).date(),
+            status="activa"
+        )
+
+    db.session.add(sub)
+    db.session.commit()
+
+        # === PAYMENTS ===
+    payment = Payment(
+            subscription_id=sub.id,
+            amount=19.99,
+            method="tarjeta",
+            status="pagado"
+        )
+
+    db.session.add(payment)
+    db.session.commit()
+
+        # === EVENTS ===
+    event = Event(
+            nombre="Bootcamp en el parque",
+            creator_id=user2.id,
+            description="Entrenamiento funcional al aire libre",
+            fecha_inicio=datetime.utcnow() + timedelta(days=2),
+            fecha_fin=datetime.utcnow() + timedelta(days=2, hours=2),
+            ubicacion="Parque Central",
+            capacidad=20
+        )
+
+    db.session.add(event)
+    db.session.commit()
+
+        # === SIGNUP ===
+    signup = EventSignup(
+            event_id=event.id,
+            user_id=user1.id,
+            estado="confirmado"
+        )
+
+    db.session.add(signup)
+    db.session.commit()
+
+        # === TICKET ===
+    ticket = SupportTicket(
+            user_id=user1.id,
+            asunto="Error al acceder al plan",
+            mensaje="No puedo ver el contenido del plan 'Fuerza Inicial'.",
+        )
+
+    db.session.add(ticket)
+    db.session.commit()
+
+
+    return jsonify({'success':True})
