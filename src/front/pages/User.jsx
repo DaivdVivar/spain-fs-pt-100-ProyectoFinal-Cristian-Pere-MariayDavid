@@ -205,7 +205,7 @@ const User = () => {
                 placeholder="URL imagen"
                 className="user-input"
               />
-              <img src={usuario.imagen || "/logoCrema1.png"} alt="Usuario" className="user-imagen" />
+              <img src={usuario.imagen || "https://res.cloudinary.com/dchrsbres/image/upload/v1750753610/dcy10ssid2lusqbftqrk.png"} alt="Usuario" className="user-imagen" />
               <div className="user-botones-perfil">
                 <button className="user-btn-guardar" onClick={handleSave}>Guardar</button>
                 <button className="user-btn-cancelar" onClick={() => setIsEditing(false)}>Cancelar</button>
@@ -223,7 +223,7 @@ const User = () => {
 
             {/* CENTRO: imagen + botones */}
             <div className="user-columna-centro">
-              <img src={usuario.imagen || "/logoCrema1.png"} alt="Usuario" className="user-imagen" />
+              <img src={usuario.imagen || "https://res.cloudinary.com/dchrsbres/image/upload/v1750753610/dcy10ssid2lusqbftqrk.png"} alt="Usuario" className="user-imagen" />
               <div className="user-botones-perfil">
                 <button className="user-btn-editar" onClick={() => setIsEditing(true)}>Editar datos</button>
                 <button className="user-btn-borrar" onClick={handleDelete}>Borrar perfil</button>
@@ -246,7 +246,7 @@ const User = () => {
             <h2>Tu entrenador</h2>
             <>
               <img
-                src={entrenador?.imagen || "/logoCrema1.png"}
+                src={entrenador?.imagen || "https://res.cloudinary.com/dchrsbres/image/upload/v1750753610/dcy10ssid2lusqbftqrk.png"}
                 alt="Entrenador"
                 className="user-entrenador-img"
               />

@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../../styles/navbar.css";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 
+
 let items = [
   { name: "Sobre Nosotros", link: "/AboutUs", internal: true },
   { name: "Profesionales", link: "/profesionales", internal: true },
@@ -143,7 +144,7 @@ export const Navbar = () => {
                     alt={item.name}
                     className="menu-avatar"
                     onError={(e) => {
-                      e.target.src = "/logoCrema1.png";
+                      e.target.src = "https://res.cloudinary.com/dchrsbres/image/upload/v1750753610/dcy10ssid2lusqbftqrk.png"
                     }}
                   />
                 </Link>

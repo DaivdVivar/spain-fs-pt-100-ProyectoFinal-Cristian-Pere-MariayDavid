@@ -17,7 +17,7 @@ const ProfesoresPage = () => {
       let datos = {
         id: user.id,
         nombre: user.nombre || "",
-        imagen: user.imagen ?? "/logoCrema1.png",
+        imagen: user.imagen ?? "https://res.cloudinary.com/dchrsbres/image/upload/v1750753610/dcy10ssid2lusqbftqrk.png",
         especialidad: user.profession_type || "",
         email: user.email || "",
         telefono: user.telefono || "",
@@ -165,7 +165,7 @@ const ProfesoresPage = () => {
             <div className="prof-columna-centro">
               <p><strong>Imagen:</strong></p>
               <input name="imagen" value={profesor.imagen} onChange={handleProfesorChange} />
-              <img src={profesor.imagen} className="prof-imagen-profesor" onError={(e) => (e.target.src = "/logoCrema1.png")} />
+              <img src={profesor.imagen} className="prof-imagen-profesor" onError={(e) => (e.target.src = "https://res.cloudinary.com/dchrsbres/image/upload/v1750753610/dcy10ssid2lusqbftqrk.png")} />
               <div className="prof-botones">
                 <button className="prof-btn-guardar" onClick={handleSave}>Guardar</button>
                 <button className="prof-btn-cancelar" onClick={() => setIsEditing(false)}>Cancelar</button>
@@ -180,7 +180,7 @@ const ProfesoresPage = () => {
               <p><strong>Teléfono:</strong> {profesor.telefono}</p>
             </div>
             <div className="prof-columna-centro">
-              <img src={profesor.imagen} alt="Foto del profesor" className="prof-imagen-profesor" onError={(e) => (e.target.src = "/logoCrema1.png")} />
+              <img src={profesor.imagen} alt="Foto del profesor" className="prof-imagen-profesor" onError={(e) => (e.target.src = "https://res.cloudinary.com/dchrsbres/image/upload/v1750753610/dcy10ssid2lusqbftqrk.png")} />
               <div className="prof-botones">
                 <button className="prof-btn-editar" onClick={() => setIsEditing(true)}>Editar</button>
                 <button className="prof-btn-borrar" onClick={handleDelete}>Borrar</button>

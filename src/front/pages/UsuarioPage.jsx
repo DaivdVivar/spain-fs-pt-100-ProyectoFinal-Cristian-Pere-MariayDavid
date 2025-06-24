@@ -31,7 +31,7 @@ const UsuarioPage = () => {
                 <div className="usuario-columna usuario-centro">
                     <p className="usuario-nombre">{usuario.nombre || "Nombre desconocido"}</p>
                     <img
-                        src={usuario.imagen || "/logoCrema1.png"}
+                        src={usuario.imagen || "https://res.cloudinary.com/dchrsbres/image/upload/v1750753610/dcy10ssid2lusqbftqrk.png"}
                         alt="Avatar"
                         className="usuario-avatar"
                     />
