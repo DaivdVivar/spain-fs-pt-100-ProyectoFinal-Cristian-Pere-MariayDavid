@@ -1266,7 +1266,7 @@ def seed():
     usuarios = []
     user_instances = []
 
-    for i in range(1, 51):
+    for i in range(1, 21):
         nombre = random.choice(nombres)
         apellido = random.choice(apellidos)
         sexo = random.choice(sexos)
